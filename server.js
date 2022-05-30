@@ -1,8 +1,8 @@
 const express = require('express');
 
-const severConfig = require('./configs/server/config');
+const serverConfig = require('./configs/server.config.js');
 const app = express();
 
-app.prependOnceListener(serverConfig.PORT, () => {
+app.listen(serverConfig.PORT, () => {
     console.log(`Application started on the port no : ${serverConfig.PORT}`)
 })
