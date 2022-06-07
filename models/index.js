@@ -11,20 +11,24 @@
 
 
 
-const config = require("../config/db.config");
+const config = require("../configs/db.config");
 const Sequelize = require("sequelize");
 
 const seq = new Sequelize(
     config.DB,
     config.USER,
-    config.PASSSWORD,
+    config.PASSWORD,
     {
         host: config.HOST,
-        dilect: config.dialect
+        dialect: config.dialect
     }
 );
 
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = seq;
-db.category = require('./category.model.js')(sequelize, Sequelize);
+db.category = require('./category.model.js')(db.sequelize, Sequelize);
+db.product = require('./product.model.js')(db.sequelize, Sequelize);
+
+
+module.exports = db;

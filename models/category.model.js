@@ -7,17 +7,17 @@
 3.description
 */
 
-//const { Sequelize } = require("sequelize/types");
+//const { Sequelize } = require("sequelize.types");
 
-module.exports = (sequelize, Sequelize) =>{
-const Category = Sequelize.define("category", {
+module.exports = (sequelize, Sequelize) => {
+const Category = sequelize.define("category", {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     name : {
-        type: Sequelize.toString,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     description: {

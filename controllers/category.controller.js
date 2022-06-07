@@ -5,8 +5,8 @@
 */
 
 //const { category } = require("../models");not reqd as line 9 there
-const req = require("express/lib/request");
-const res = require("express/lib/response");
+//const req = require("express/lib/request");
+//const res = require("express/lib/response");
 const db = require("../models");
 const Category = db.category;
 
@@ -55,7 +55,7 @@ exports.findAll = (req, res) => {
     let promise;
     if(categoryName)
     {
-        promise = Categpry.findAll({
+        promise = Category.findAll({
             where:{
                 name: categoryName
             }
@@ -84,11 +84,16 @@ exports.findOne = (req,res) => {
 
     Category.findByPk(categoryId)
     .then(category => {
+        if(!category){
+            return res.status(404).json({
+                message: 'Category not found'
+            })
+        }
         res.status(200).send(category);
     })
     .catch(err => {
         res.status(500).send({
-            message:"Some internal error while fetching the category"
+            message:"Some internal error while fetching the category based on id"
         })
     })
 }
@@ -105,7 +110,7 @@ exports.update = (req, res) => {
     const categoryId = req.params.id;
 
     Category.update(category, {
-        where: {id:categoryId}
+        where: {id: categoryId}
     })
     .then(updatedCategory => {
         //where the updation happened successfully.
@@ -114,19 +119,43 @@ exports.update = (req, res) => {
         //there can be error
         Category.findByPk(categoryId)
         .then(category => {
-            res.status(200).send({})
+            res.status(200).send(category);
         })
-        .catch(err=>
+        .catch(err=>{
             res.status(500).send({
-                message:"Some interna error while fetching "
+                message:"Some internal error while fetching the category based on id"
             })
-        )
+         })
     })
 
     .catch(err => {
         //where the updation task failed.
         res.status(500).send({
-            message: "Some internal error while updating the catch"
+            message: "Some internal error while updating the category based on id"
+        })
+    })
+}
+
+/*
+    *Delete an existing category based on category name
+*/
+
+exports.delete = (req, res) => {
+    const categoryId = req.params.id;
+
+    Category.destroy({
+        where: {
+            id: categoryId
+        }
+    })
+    .then(result => {
+        res.status(200).send({
+            message: "Successfully deleted the category"
+        })
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: "Some internal error while deleting the category based on id"
         })
     })
 }
